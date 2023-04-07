@@ -1,0 +1,26 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+FROM mcr.microsoft.com/cbl-mariner/base/python:3 AS python-builder
+
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt --target=/app/python-packages
+
+COPY . .
+
+# Assuming this image name was used while creating the distroless python image with nonroot user using Marinara.
+FROM distroless/python:3-nonroot
+
+WORKDIR /home/nonroot
+
+COPY --from=python-builder /app /home/nonroot
+COPY --from=python-builder /app/python-packages/ /usr/lib/python3.9/site-packages/
+
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+
+USER nonroot
+
+# HOST_PORT:        8000
+# CONTAINER_PORT:   5000

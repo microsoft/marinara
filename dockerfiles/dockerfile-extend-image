@@ -1,0 +1,58 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+ARG IMAGE_TO_MODIFY
+ARG MARINER_VERSION
+
+FROM ${IMAGE_TO_MODIFY} AS modify
+
+FROM marinara:${MARINER_VERSION} AS builder
+
+ARG MARINER_VERSION
+ARG PACKAGES_INSTALL_LOCATION="/staging"
+ARG PACKAGES_TO_INSTALL
+ARG PACKAGES_TO_HOLDBACK
+ARG ORIGINAL_MANIFEST_LOCATION="/var/lib/rpmmanifest"
+ARG TEMP_MANIFEST_LOCATION="/tmp/rpmmanifest"
+ARG USER="root"
+ARG USER_UID=0
+ARG USER_GID=${USER_UID}
+
+# Copy the manifest files from the distroless image to the installer image.
+# In Mariner distroless containers, there are two files at this location:
+#   (1) container-manifest-1
+#   (2) container-manifest-2
+COPY --from=modify ${ORIGINAL_MANIFEST_LOCATION}/ ${TEMP_MANIFEST_LOCATION}/
+
+RUN marinaraextend.py \
+    --mariner-version "${MARINER_VERSION}" \
+    --location "${PACKAGES_INSTALL_LOCATION}" \
+    --add-packages "${PACKAGES_TO_INSTALL}" \
+    --packages-to-holdback "${PACKAGES_TO_HOLDBACK}" \
+    --existing-manifest-location "${TEMP_MANIFEST_LOCATION}" \
+    --new-manifest-location "${ORIGINAL_MANIFEST_LOCATION}" \
+    --user "${USER}" \
+    --user-uid "${USER_UID}" \
+    --user-gid "${USER_GID}"
+
+FROM ${IMAGE_TO_MODIFY} as FINAL
+ARG PACKAGES_INSTALL_LOCATION="/staging"
+ARG USER="root"
+ARG USER_UID=0
+ARG USER_GID=${USER_UID}
+
+COPY --from=builder ${PACKAGES_INSTALL_LOCATION}/ /
+
+# Workaround for https://github.com/moby/moby/issues/38710
+COPY --from=builder --chown=${USER_UID}:${USER_UID} ${PACKAGES_INSTALL_LOCATION}/home/ /home/
+
+FROM scratch
+
+ARG USER="root"
+ARG USER_UID=0
+ARG USER_GID=${USER_UID}
+
+COPY --from=FINAL / /
+COPY --from=FINAL --chown=${USER_UID}:${USER_UID} /home/ /home/
+
+USER ${USER}
