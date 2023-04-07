@@ -1,0 +1,23 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+FROM mcr.microsoft.com/cbl-mariner/base/nodejs:16 AS nodejs-builder
+
+WORKDIR /app
+
+COPY package.json .
+COPY server.js .
+
+RUN npm install
+
+# Assuming this image name was used while creating the distroless nodejs image using Marinara.
+FROM distroless/nodejs:16
+
+WORKDIR /app
+
+COPY --from=nodejs-builder /app /app
+
+CMD [ "npm", "run", "start" ]
+
+# HOST_PORT:        8080
+# CONTAINER_PORT:   8080

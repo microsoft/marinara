@@ -1,0 +1,38 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+ARG MARINER_VERSION=2.0
+
+FROM marinara:${MARINER_VERSION} AS builder
+
+ARG IMAGE_TYPE="minimal"
+ARG MARINER_VERSION=2.0
+ARG PACKAGES_INSTALL_LOCATION="/staging"
+ARG PACKAGES_TO_INSTALL
+ARG PACKAGES_TO_HOLDBACK
+ARG USER="root"
+ARG USER_UID=0
+ARG USER_GID=${USER_UID}
+
+RUN marinaracreate.py \
+    --image-type "${IMAGE_TYPE}" \
+    --mariner-version "${MARINER_VERSION}" \
+    --location "${PACKAGES_INSTALL_LOCATION}" \
+    --add-packages "${PACKAGES_TO_INSTALL}" \
+    --packages-to-holdback "${PACKAGES_TO_HOLDBACK}" \
+    --user "${USER}" \
+    --user-uid "${USER_UID}" \
+    --user-gid "${USER_GID}"
+
+FROM scratch
+ARG PACKAGES_INSTALL_LOCATION="/staging"
+ARG USER="root"
+ARG USER_UID=0
+ARG USER_GID=${USER_UID}
+
+COPY --from=builder ${PACKAGES_INSTALL_LOCATION}/ /
+
+# Workaround for https://github.com/moby/moby/issues/38710
+COPY --from=builder --chown=${USER_UID}:${USER_UID} ${PACKAGES_INSTALL_LOCATION}/home/ /home/
+
+USER ${USER}

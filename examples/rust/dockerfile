@@ -1,0 +1,22 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+FROM mcr.microsoft.com/cbl-mariner/base/rust:1 AS rust-builder
+
+WORKDIR /usr/src/app
+
+COPY mariner-rust-app/ .
+
+RUN cargo install --path .
+
+# Assuming this image name was used while creating the distroless cc image using Marinara.
+FROM distroless/cc:2.0
+
+WORKDIR /usr/src/app
+
+COPY --from=rust-builder /usr/src/app /usr/src/app
+
+CMD ["target/release/mariner-rust-app"]
+
+# HOST_PORT:        8080
+# CONTAINER_PORT:   8080

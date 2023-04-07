@@ -1,0 +1,16 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+ARG MARINER_VERSION=2.0
+
+FROM mcr.microsoft.com/cbl-mariner/base/core:${MARINER_VERSION} as installer
+
+RUN tdnf install -y shadow-utils python3 dnf && tdnf clean all
+
+COPY scripts/ /usr/sbin/
+
+# Squash image layers into one layer.
+FROM scratch
+
+COPY --from=installer / /
+CMD ["bash"]
