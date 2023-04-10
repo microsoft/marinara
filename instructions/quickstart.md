@@ -1,6 +1,12 @@
 # Quick Start Guide
 
-Marinara docker image `marinara` with current tags `1.0` and `2.0` can be used to build CBL-Mariner distroless image from scratch or extend a CBL-Mariner distroless image.
+Marinara docker image can be used to build CBL-Mariner distroless image from scratch or extend a CBL-Mariner distroless image.
+
+## Marinara image on MCR
+
+Marinara builder image is currently available on MCR for CBL-Mariner version 2.0 at `mcr.microsoft.com/cbl-mariner/marinara:2.0`. There are Mariner build specific tags as well but the 2.0 tag will give you the latest version of Marinara image.
+
+> Note: If you'd like to use Marinara to build distroless images for CBL-Mariner version 1.0, then you'd have to build Marinara builder image yourself locally as the 1.0 image won't be available through MCR.
 
 ## How to use marinara docker image with dockerfile-new-image to build a distroless image from scratch
 

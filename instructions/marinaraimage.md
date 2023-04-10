@@ -1,6 +1,6 @@
 # Marinara Docker Image
 
-## Build Marinara image
+## Build Marinara image locally
 ### Use the following docker commands to generate **marinara** docker images locally
 
 |Marinara Image|Docker Command|

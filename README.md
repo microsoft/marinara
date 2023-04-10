@@ -34,7 +34,7 @@ Marinara can be used to extend a CBL-Mariner distroless image by adding packages
 
 ### Marinara docker image
 
-Marinara docker image is developed by Mariner team with the goal of producing distroless images. It is based on CBL-Mariner base container image. It is available for all versions of CBL-Mariner i.e., `1.0` and `2.0`.
+Marinara docker image is developed by Mariner team with the goal of producing distroless images. It is based on CBL-Mariner base container image. It is available on MCR for CBL-Mariner version `2.0`. Although, the `1.0` version of the image is not available in MCR, you can create it locally by following instructions in [Marinara image instructions](/instructions/marinaraimage.md).
 
 Additionally, it comes with essential utilities and packages preinstalled that can be used to create a distroless image from scratch or extend a distroless image by adding more packages to it:
 
