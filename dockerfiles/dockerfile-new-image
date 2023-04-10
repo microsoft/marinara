@@ -3,7 +3,7 @@
 
 ARG MARINER_VERSION=2.0
 
-FROM marinara:${MARINER_VERSION} AS builder
+FROM mcr.microsoft.com/cbl-mariner/marinara:${MARINER_VERSION} AS builder
 
 ARG IMAGE_TYPE="minimal"
 ARG MARINER_VERSION=2.0

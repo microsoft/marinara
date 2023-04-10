@@ -6,7 +6,7 @@ ARG MARINER_VERSION
 
 FROM ${IMAGE_TO_MODIFY} AS modify
 
-FROM marinara:${MARINER_VERSION} AS builder
+FROM mcr.microsoft.com/cbl-mariner/marinara:${MARINER_VERSION} AS builder
 
 ARG MARINER_VERSION
 ARG PACKAGES_INSTALL_LOCATION="/staging"
