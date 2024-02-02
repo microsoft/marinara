@@ -14,6 +14,38 @@ ARG USER="root"
 ARG USER_UID=0
 ARG USER_GID=${USER_UID}
 
+# When providing paths to RPMS and LOCAL_REPO_FILE, the paths should be relative to the marinara directory.
+# For example, if the RPMS are in the same directory as the Dockerfile, the path should be "RPMS".
+# The same applies to LOCAL_REPO_FILE.
+# NOTE: Beware of the docker context behavior when passing paths to RPMS and LOCAL_REPO_FILE.
+#       The paths should be relative to the docker context.
+# if $PWD is /home/user and marinara source files are in /home/user/marinara
+# and if the rpms are in /home/user/somedir/RPMS, then the path provided to RPMS should be "/somedir/RPMS"
+# e.g., build-arg RPMS="/somedir/RPMS"
+# However, if the $PWD is /home/user/marinara, and the rpms are in /home/user/somedir/RPMS,
+# then docker context cannot access /home/user/somedir/RPMS because /somedir is outside the context of marinara.
+# In this case, either the rpms should be copied to the marinara directory and the path provided to RPMS should be "RPMS"
+# or the docker context should be changed to /home/user and the path provided to RPMS should be "/somedir/RPMS"
+ARG RPMS
+ARG LOCAL_REPO_FILE="local.repo"
+ARG LOCAL_REPO_PATH="/localrepo" 
+
+COPY ${RPMS} /WORKDIR/RPMS
+COPY ${LOCAL_REPO_FILE} /WORKDIR/REPO/local.repo
+
+# Create local repo if RPMS are provided
+# This will allow the user to install packages from the local repo
+# instead of fetching from PMC
+RUN if [ "${RPMS}" ]; then \
+    mkdir -p $LOCAL_REPO_PATH; \
+    tdnf install -y createrepo; \
+    cp -r /WORKDIR/RPMS ${LOCAL_REPO_PATH}; \
+    cp /WORKDIR/REPO/local.repo /etc/yum.repos.d/local.repo; \
+    createrepo --database ${LOCAL_REPO_PATH} --workers 10; \
+    tdnf makecache; \
+    tdnf autoremove -y createrepo; \
+fi
+
 RUN marinaracreate.py \
     --image-type "${IMAGE_TYPE}" \
     --mariner-version "${MARINER_VERSION}" \
