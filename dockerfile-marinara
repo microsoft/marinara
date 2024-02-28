@@ -8,7 +8,7 @@ FROM mcr.microsoft.com/$NAMESPACE/base/core:${AZL_VERSION} as installer
 
 ARG AZL_VERSION=2.0
 
-RUN tdnf install -y --releasever=${AZL_VERSION} shadow-utils python3 dnf && tdnf clean all
+RUN tdnf install -y --releasever=${AZL_VERSION} shadow-utils python3 && tdnf clean all
 
 COPY scripts/ /usr/sbin/
 
