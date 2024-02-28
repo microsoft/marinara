@@ -95,8 +95,8 @@ def installAzureLinuxPackages(azureLinuxVersion, installLocation, packagesToInst
 
         os.makedirs(rpmsDownloadDirPath)
         packagesToDownloadString = ' '.join(map(str, reducedListOfPackagesToInstall))
-        dnfDownloadCommand = "dnf install -y --downloadonly --destdir {} --releasever={} --installroot={} {}".format(rpmsDownloadDirPath, azureLinuxVersion, installLocation, packagesToDownloadString)
-        _ = executeBashCommand(dnfDownloadCommand)
+        tdnfDownloadCommand = "tdnf install -y --downloadonly --downloaddir {} --releasever={} --installroot={} {}".format(rpmsDownloadDirPath, azureLinuxVersion, installLocation, packagesToDownloadString)
+        _ = executeBashCommand(tdnfDownloadCommand)
 
         print("Packages To Holdback: {}".format(packagesToHoldback))
 
