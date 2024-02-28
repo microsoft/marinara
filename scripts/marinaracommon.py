@@ -73,7 +73,7 @@ def writeRpmQueryResultToManifestFile(manifestsDirectory, rpmQueryResult, fileNa
 def getPackageNameFromRpmFileName(rpmFileName):
     return re.split("[-][0-9]", rpmFileName)[0]
 
-def installMarinerPackages(marinerVersion, installLocation, packagesToInstall, packagesToHoldback):
+def installAzureLinuxPackages(azureLinuxVersion, installLocation, packagesToInstall, packagesToHoldback):
     useRpmNoDeps = len(packagesToHoldback) > 0
     if useRpmNoDeps:
         # Install the distroless-packages-* first using tdnf
@@ -88,15 +88,15 @@ def installMarinerPackages(marinerVersion, installLocation, packagesToInstall, p
 
         distrolessBasePackagesString = ' '.join(map(str, distrolessBasePackages))
         print(distrolessBasePackages)
-        tdnfInstallCommand = "tdnf install -y --releasever={} --installroot={} {}".format(marinerVersion, installLocation, distrolessBasePackagesString)
+        tdnfInstallCommand = "tdnf install -y --releasever={} --installroot={} {}".format(azureLinuxVersion, installLocation, distrolessBasePackagesString)
         _ = executeBashCommand(tdnfInstallCommand)
 
         rpmsDownloadDirPath = os.path.join(installLocation, "rpms")
 
         os.makedirs(rpmsDownloadDirPath)
         packagesToDownloadString = ' '.join(map(str, reducedListOfPackagesToInstall))
-        dnfDownloadCommand = "dnf install -y --downloadonly --destdir {} --releasever={} --installroot={} {}".format(rpmsDownloadDirPath, marinerVersion, installLocation, packagesToDownloadString)
-        _ = executeBashCommand(dnfDownloadCommand)
+        tdnfDownloadCommand = "tdnf install -y --downloadonly --downloaddir {} --releasever={} --installroot={} {}".format(rpmsDownloadDirPath, azureLinuxVersion, installLocation, packagesToDownloadString)
+        _ = executeBashCommand(tdnfDownloadCommand)
 
         print("Packages To Holdback: {}".format(packagesToHoldback))
 
@@ -112,10 +112,10 @@ def installMarinerPackages(marinerVersion, installLocation, packagesToInstall, p
         shutil.rmtree(rpmsDownloadDirPath)
     else:
         packagesToInstallString = ' '.join(map(str, packagesToInstall))
-        tdnfInstallCommand = "tdnf install -y --releasever={} --installroot={} {}".format(marinerVersion, installLocation, packagesToInstallString)
+        tdnfInstallCommand = "tdnf install -y --releasever={} --installroot={} {}".format(azureLinuxVersion, installLocation, packagesToInstallString)
         _ = executeBashCommand(tdnfInstallCommand)
     
-    tdnfCleanupCommand = "tdnf clean all --releasever={} --installroot={}".format(marinerVersion, installLocation)
+    tdnfCleanupCommand = "tdnf clean all --releasever={} --installroot={}".format(azureLinuxVersion, installLocation)
     _ = executeBashCommand(tdnfCleanupCommand)
 
 def createContainerManifestFiles(installLocation, manifestsDirectory):

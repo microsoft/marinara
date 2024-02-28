@@ -2,13 +2,17 @@
 # Licensed under the MIT License.
 
 ARG IMAGE_TO_MODIFY
-ARG MARINER_VERSION
+
+# For Azure Linux 3.0 image,
+# pass 3.0 as a value for AZL_VERSION and azurelinux as a value for NAMESPACE.
+ARG AZL_VERSION
+ARG NAMESPACE=cbl-mariner
 
 FROM ${IMAGE_TO_MODIFY} AS modify
 
-FROM mcr.microsoft.com/cbl-mariner/marinara:${MARINER_VERSION} AS builder
+FROM mcr.microsoft.com/${NAMESPACE}/marinara:${AZL_VERSION} AS builder
 
-ARG MARINER_VERSION
+ARG AZL_VERSION
 ARG PACKAGES_INSTALL_LOCATION="/staging"
 ARG PACKAGES_TO_INSTALL
 ARG PACKAGES_TO_HOLDBACK
@@ -19,13 +23,13 @@ ARG USER_UID=0
 ARG USER_GID=${USER_UID}
 
 # Copy the manifest files from the distroless image to the installer image.
-# In Mariner distroless containers, there are two files at this location:
+# In Azure Linux distroless containers, there are two files at this location:
 #   (1) container-manifest-1
 #   (2) container-manifest-2
 COPY --from=modify ${ORIGINAL_MANIFEST_LOCATION}/ ${TEMP_MANIFEST_LOCATION}/
 
 RUN marinaraextend.py \
-    --mariner-version "${MARINER_VERSION}" \
+    --azure-linux-version "${AZL_VERSION}" \
     --location "${PACKAGES_INSTALL_LOCATION}" \
     --add-packages "${PACKAGES_TO_INSTALL}" \
     --packages-to-holdback "${PACKAGES_TO_HOLDBACK}" \

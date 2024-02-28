@@ -1,5 +1,5 @@
 [package]
-name = "mariner-rust-app"
+name = "azure-linux-rust-app"
 version = "0.1.0"
 edition = "2021"
 

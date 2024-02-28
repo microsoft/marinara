@@ -1,7 +1,10 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-FROM mcr.microsoft.com/cbl-mariner/base/python:3 AS python-builder
+# For Azure Linux 3.0 image, pass azurelinux as a value for NAMESPACE
+ARG NAMESPACE=cbl-mariner
+
+FROM mcr.microsoft.com/${NAMESPACE}/base/python:3 AS python-builder
 
 WORKDIR /app
 

@@ -12,7 +12,7 @@ const HOST = '0.0.0.0';
 // App
 const app = express();
 app.get('/', (req, res) => {
-  res.send('Hello from the node server running inside Mariner NodeJS distroless container.');
+  res.send('Hello from the node server running inside Azure Linux NodeJS distroless container.');
 });
 
 app.listen(PORT, HOST);
