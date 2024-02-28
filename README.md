@@ -38,9 +38,9 @@ Marinara docker image is developed by Azure Linux team with the goal of producin
 
 Additionally, it comes with essential utilities and packages preinstalled that can be used to create a distroless image from scratch or extend a distroless image by adding more packages to it:
 
-- **marinaracreate.py** - Composes an image, given an `image type`, `mariner version`, `packages to install`, and `user`. Some of the arguments can be optional depending on the image type.
+- **marinaracreate.py** - Composes an image, given an `image type`, `azure linux version`, `packages to install`, and `user`. Some of the arguments can be optional depending on the image type.
 
-- **marinaraextend.py** - Extends an Azure Linux distroless image, given an `image to extend`, `mariner version`, and `packages to install`.
+- **marinaraextend.py** - Extends an Azure Linux distroless image, given an `image to extend`, `azure linux version`, and `packages to install`.
 
 Marinara uses `tdnf` package manager under the hood to install packages and their dependencies. The tooling included in the marinara docker image abstracts away the internals of tdnf installation process, along with the process of producing or keeping the container manifest files up-to-date. Although you have the ability to further modify, for a general use case, the starter dockerfiles do not require any modification to produce different flavors of a distroless image.
 

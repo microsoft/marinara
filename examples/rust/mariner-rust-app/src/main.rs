@@ -12,5 +12,5 @@ async fn main() -> tide::Result<()> {
 }
 
 async fn greet(_req: Request<()>) -> tide::Result {
-    Ok(format!("Hello from the Rust server running in the Mariner Rust distroless container.").into())
+    Ok(format!("Hello from the Rust server running in the Azure Linux Rust distroless container.").into())
 }

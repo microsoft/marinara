@@ -1,22 +1,25 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-FROM mcr.microsoft.com/cbl-mariner/base/rust:1 AS rust-builder
+# For Azure Linux 3.0 image, pass azurelinux as a value for NAMESPACE
+ARG NAMESPACE=cbl-mariner
+
+FROM mcr.microsoft.com/${NAMESPACE}/base/rust:1 AS rust-builder
 
 WORKDIR /usr/src/app
 
-COPY mariner-rust-app/ .
+COPY azure-linux-rust-app/ .
 
 RUN cargo install --path .
 
 # Assuming this image name was used while creating the distroless cc image using Marinara.
-FROM distroless/cc:2.0
+FROM distroless/cc
 
 WORKDIR /usr/src/app
 
 COPY --from=rust-builder /usr/src/app /usr/src/app
 
-CMD ["target/release/mariner-rust-app"]
+CMD ["target/release/azure-linux-rust-app"]
 
 # HOST_PORT:        8080
 # CONTAINER_PORT:   8080

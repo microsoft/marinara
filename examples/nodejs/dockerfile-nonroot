@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
+# For Azure Linux 3.0 image, pass azurelinux as a value for NAMESPACE
 ARG NAMESPACE=cbl-mariner
 
 FROM mcr.microsoft.com/${NAMESPACE}/base/nodejs:18 AS nodejs-builder

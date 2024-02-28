@@ -2,6 +2,9 @@
 # Licensed under the MIT License.
 
 ARG IMAGE_TO_MODIFY
+
+# For Azure Linux 3.0 image,
+# pass 3.0 as a value for AZL_VERSION and azurelinux as a value for NAMESPACE.
 ARG AZL_VERSION
 ARG NAMESPACE=cbl-mariner
 
