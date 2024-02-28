@@ -4,9 +4,11 @@
 ARG AZL_VERSION=2.0
 ARG NAMESPACE=cbl-mariner
 
-FROM mcr.microsoft.com/$NAMESPACE/base/core:${AZURE_LINUX_VERSION} as installer
+FROM mcr.microsoft.com/$NAMESPACE/base/core:${AZL_VERSION} as installer
 
-RUN tdnf install -y --releasever=$AZL_VERSION shadow-utils python3 dnf && tdnf clean all
+ARG AZL_VERSION=2.0
+
+RUN tdnf install -y --releasever=${AZL_VERSION} shadow-utils python3 dnf && tdnf clean all
 
 COPY scripts/ /usr/sbin/
 
