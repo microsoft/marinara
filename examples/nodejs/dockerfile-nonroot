@@ -1,7 +1,9 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-FROM mcr.microsoft.com/cbl-mariner/base/nodejs:16 AS nodejs-builder
+ARG NAMESPACE=cbl-mariner
+
+FROM mcr.microsoft.com/${NAMESPACE}/base/nodejs:18 AS nodejs-builder
 
 WORKDIR /app
 
@@ -11,7 +13,7 @@ COPY server.js .
 RUN npm install
 
 # Assuming this image name was used while creating the distroless nodejs image with nonroot user using Marinara.
-FROM distroless/nodejs:16-nonroot
+FROM distroless/nodejs:18-nonroot
 
 WORKDIR /app
 

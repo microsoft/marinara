@@ -9,7 +9,7 @@ from pathlib import Path
 
 class BuildData:
     def __init__(self,
-               marinerVersion,
+               azureLinuxVersion,
                location,
                packagesToAdd,
                packagesToHoldback,
@@ -19,7 +19,7 @@ class BuildData:
                userGid,
                originalManifestsDirectory,
                finalManifestsDirectory):
-        self.marinerVersion = marinerVersion
+        self.azureLinuxVersion = azureLinuxVersion
         self.location = location
         self.packagesToAdd = packagesToAdd
         self.packagesToHoldback = packagesToHoldback
@@ -35,11 +35,11 @@ class BuildData:
 
 def readArgs():
     parser = argparse.ArgumentParser(
-        description="Extend a CBL-Mariner Distroless Image.",
+        description="Extend an Azure Linux Distroless Image.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
-        "--mariner-version", required=True, type=str, help="Mariner version (1.0, 2.0).",
+        "--azure-linux-version", required=True, type=str, help="Azure Linux version (2.0, 3.0).",
     )
     parser.add_argument(
         "--location", required=True, type=str, help="Directory location to install the packages in.",
@@ -84,9 +84,9 @@ def validateArgs(args):
     if not args.add_packages.strip():
         raise ValueError("Invalid value \"%s\" passed for argument %s." % (args.add_packages, "--add-packages"))
 
-    # Validate mariner version
-    if args.mariner_version != "1.0" and args.mariner_version != "2.0":
-        raise ValueError("Invalid value \"%s\" passed for argument %s." % (args.mariner_version, "--mariner-version"))
+    # Validate Azure Linux version
+    if args.azure_linux_version != "2.0" and args.azure_linux_version != "3.0":
+        raise ValueError("Invalid value \"%s\" passed for argument %s." % (args.azure_linux_version, "--azure-linux-version"))
 
     # Validate root/nonroot user
     if "root" == args.user:
@@ -114,7 +114,7 @@ def prepareBuild(args):
     os.makedirs(finalManifestsDirectory)
 
     return BuildData(
-        args.mariner_version,
+        args.azure_linux_version,
         args.location,
         addPackages,
         packagesToHoldback,
@@ -127,8 +127,8 @@ def prepareBuild(args):
     )
 
 def buildImage(buildData):
-    marinaracommon.installMarinerPackages(
-        buildData.marinerVersion,
+    marinaracommon.installAzureLinuxPackages(
+        buildData.azureLinuxVersion,
         buildData.location,
         buildData.packagesToAdd,
         buildData.packagesToHoldback

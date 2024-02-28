@@ -1,12 +1,13 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-ARG MARINER_VERSION=2.0
+ARG AZL_VERSION=2.0
+ARG NAMESPACE=cbl-mariner
 
-FROM mcr.microsoft.com/cbl-mariner/marinara:${MARINER_VERSION} AS builder
+FROM mcr.microsoft.com/${NAMESPACE}/marinara:${AZL_VERSION} AS builder
 
 ARG IMAGE_TYPE="minimal"
-ARG MARINER_VERSION=2.0
+ARG AZL_VERSION=2.0
 ARG PACKAGES_INSTALL_LOCATION="/staging"
 ARG PACKAGES_TO_INSTALL
 ARG PACKAGES_TO_HOLDBACK
@@ -48,7 +49,7 @@ fi
 
 RUN marinaracreate.py \
     --image-type "${IMAGE_TYPE}" \
-    --mariner-version "${MARINER_VERSION}" \
+    --azure-linux-version "${AZL_VERSION}" \
     --location "${PACKAGES_INSTALL_LOCATION}" \
     --add-packages "${PACKAGES_TO_INSTALL}" \
     --packages-to-holdback "${PACKAGES_TO_HOLDBACK}" \

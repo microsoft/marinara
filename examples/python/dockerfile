@@ -1,7 +1,9 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-FROM mcr.microsoft.com/cbl-mariner/base/python:3 AS python-builder
+ARG NAMESPACE=cbl-mariner
+
+FROM mcr.microsoft.com/${NAMESPACE}/base/python:3 AS python-builder
 
 WORKDIR /app
 
