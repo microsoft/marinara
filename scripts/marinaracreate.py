@@ -85,7 +85,7 @@ def validateArgs(args):
         raise ValueError("Invalid value \"%s\" passed for argument %s." % (args.add_packages, "--add-packages"))
 
     # Validate Azure Linux version
-    if args.azure_linux_version != "1.0" and args.azure_linux_version != "2.0":
+    if args.azure_linux_version != "2.0" and args.azure_linux_version != "3.0":
         raise ValueError("Invalid value \"%s\" passed for argument %s." % (args.azure_linux_version, "--azure-linux-version"))
 
     # Validate nonroot user
