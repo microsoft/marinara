@@ -1,0 +1,16 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+name: CodeQL marinara repository
+
+resources:
+  repositories:
+    - repository: CBL-Mariner-Pipelines
+      type: git
+      name: mariner/CBL-Mariner-Pipelines
+      ref: 'refs/heads/master'
+
+stages:
+  - stage: CodeQlAnalysis
+    jobs:
+    - template: SDL/CodeQL-marinara.yml@CBL-Mariner-Pipelines
