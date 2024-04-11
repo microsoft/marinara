@@ -5,12 +5,19 @@
 # pass 3.0 as a value for AZL_VERSION and azurelinux as a value for NAMESPACE.
 ARG AZL_VERSION=2.0
 ARG NAMESPACE=cbl-mariner
+ARG INSTALL_DEPENDENCIES=true
 
 FROM mcr.microsoft.com/$NAMESPACE/base/core:${AZL_VERSION} as installer
 
 ARG AZL_VERSION=2.0
 
-RUN tdnf install -y --releasever=${AZL_VERSION} shadow-utils python3 && tdnf clean all
+# Install dependencies.
+RUN if [ "$INSTALL_DEPENDENCIES" = "true" ]; then \
+    tdnf install -y --releasever=${AZL_VERSION} \
+        shadow-utils \
+        python3 \
+        && tdnf clean all; \
+    fi
 
 COPY scripts/ /usr/sbin/
 
