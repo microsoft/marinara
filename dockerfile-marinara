@@ -6,11 +6,11 @@
 ARG AZL_VERSION=2.0
 ARG NAMESPACE=cbl-mariner
 ARG INSTALL_DEPENDENCIES=true
-ARG EULA
 
 FROM mcr.microsoft.com/$NAMESPACE/base/core:${AZL_VERSION} as installer
 
 ARG AZL_VERSION=2.0
+ARG EULA
 
 # Install dependencies.
 RUN if [ "$INSTALL_DEPENDENCIES" = "true" ]; then \
@@ -24,7 +24,7 @@ COPY scripts/ /usr/sbin/
 
 RUN chmod +x /usr/sbin/*
 
-ADD ${EULA} /
+COPY ${EULA} /
 
 # Squash image layers into one layer.
 FROM scratch
