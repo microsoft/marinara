@@ -9,12 +9,22 @@ ARG NAMESPACE=cbl-mariner
 FROM mcr.microsoft.com/$NAMESPACE/base/core:${AZL_VERSION} as installer
 
 ARG AZL_VERSION=2.0
+ARG INSTALL_DEPENDENCIES=true
+ARG EULA
 
-RUN tdnf install -y --releasever=${AZL_VERSION} shadow-utils python3 && tdnf clean all
+# Install dependencies.
+RUN if [ "$INSTALL_DEPENDENCIES" = "true" ]; then \
+    tdnf install -y --releasever=${AZL_VERSION} \
+        shadow-utils \
+        python3 \
+        && tdnf clean all; \
+    fi
 
 COPY scripts/ /usr/sbin/
 
 RUN chmod +x /usr/sbin/*
+
+COPY ${EULA} /
 
 # Squash image layers into one layer.
 FROM scratch
