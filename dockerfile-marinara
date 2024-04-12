@@ -24,7 +24,7 @@ COPY scripts/ /usr/sbin/
 
 RUN chmod +x /usr/sbin/*
 
-COPY ${EULA} /
+ADD ${EULA} /
 
 # Squash image layers into one layer.
 FROM scratch
