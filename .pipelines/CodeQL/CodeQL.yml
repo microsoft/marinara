@@ -8,7 +8,7 @@ resources:
     - repository: CBL-Mariner-Pipelines
       type: git
       name: mariner/CBL-Mariner-Pipelines
-      ref: 'refs/heads/master'
+      ref: 'refs/heads/pawelwi/pool_change'
 
 stages:
   - stage: CodeQlAnalysis
